@@ -5,8 +5,11 @@
 
 :start
 echo this is a custom script to boot fedora26 installer
-sleep 10
-goto boot
+menu Fedora
+item boot Fedora 26 network install
+item kickstart Fedora 26 with kickstart
+isset ${select} || choose select || goto boot
+goto ${select}
 
 :kickstart
 echo -n Specify kickstart URL for ${os} ${osversion}: && read ksurl
