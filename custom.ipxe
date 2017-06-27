@@ -4,9 +4,25 @@
 ###
 
 :start
-echo Hello world!
+echo this is a custom script to boot fedora26 installer
 sleep 10
-goto custom_exit
+goto boot
 
-:custom_exit
+:kickstart
+echo -n Specify kickstart URL for ${os} ${osversion}: && read ksurl
+set params ks=${ksurl} ||
+goto boot
+
+:boot
+imgfree
+kernel https://fr2.rpmfind.net/linux/fedora/linux/releases/test/26_Beta/Workstation/x86_64/os/images/pxeboot/vmlinuz repo=https://fr2.rpmfind.net/linux/fedora/linux/releases/test/26_Beta/Workstation/x86_64/os/ ${params} ${console} initrd=initrd.img
+initrd https://fr2.rpmfind.net/linux/fedora/linux/releases/test/26_Beta/Workstation/x86_64/os/images/pxeboot/initrd.img
+echo
+echo MD5sums:
+md5sum vmlinuz initrd.img
+boot
+goto linux_menu
+
+:linux_menu
+clear menu
 exit 0
